@@ -45,9 +45,9 @@ var line = d3.svg.line()
         .y(function(d){return y(d.attendee);});
 
 d3.csv("test_vi_hw1.csv",function(error,data){
-    data.forEach(function(d){
-        console.log(d);
-    });
+//    data.forEach(function(d){
+//        console.log(d);
+//    });
 
     //get the attributes name of each line
     color.domain(d3.keys(data[1]).filter(function(key){
@@ -62,7 +62,7 @@ d3.csv("test_vi_hw1.csv",function(error,data){
             })
         };
     });
-    //console.log(continents);
+    console.log(continents);
 
     x.domain(d3.extent(data,function(d){return d.Date;}));
     y.domain([
@@ -73,8 +73,8 @@ d3.csv("test_vi_hw1.csv",function(error,data){
                 return d3.max(c.values,function(v){return v.attendee;})
         })
     ]);
-    console.log(x.domain());
-    console.log(y);
+//    console.log(x.domain());
+//    console.log(y);
     svg.selectAll(".dot1")
             .data(data)
             .enter().append("circle")
