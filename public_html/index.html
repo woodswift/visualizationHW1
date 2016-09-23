@@ -1,258 +1,214 @@
+<!-- this is for information visualization homework 1_1 and group LYM WFT AND LLH -->
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
-    <head>
-        <title>Cartogram</title>
-        <link type="text/css" rel="stylesheet" href="../ex.css?3.2"/>
-        <!--<script type="text/javascript" src="../protovis-r3.2.js"></script>-->
-        <!--<script type="text/javascript" src="../jquery-1.4.2.min.js"></script>-->
-        <!--<script type="text/javascript" src="../jquery-ui-1.8rc3.custom.min.js"></script>-->
-        <!--<link type="text/css" href="../ui-lightness/jquery-ui-1.8rc3.custom.css" rel="stylesheet"/>-->
-        <!--<script type="text/javascript" src="centroid.js"></script>-->
-        <!--<script type="text/javascript" src="us_lowres.js"></script>-->
-        <!--<script type="text/javascript" src="us_stats.js"></script>-->
-        <!--<script type="text/javascript" src="us_borders.js"></script>-->
-        <style type="text/css">
-          #fig {
-            width: 800px;
-            height: 640px;
-          }
+<head>
+<meta charset="utf-8">
+<script src = "http://d3js.org/d3.v3.js"></script>
+<style>
+	body{
+		font: 10px verdana;
+	}
+	.axis path,
+	.axis line{
+		fill:none;
+		stroke:#333;
+	}
+<!--adding dot in multi-series line-->
 
-          #container {
-              width: 640px;
-              height: 10px;
-          }
+	.dot1{
+		stroke:steelblue;
+		fill:lightblue;
+	}
+	
+	.dot2{
+		stroke:steelblue;
+		fill:lightblue;
+	}
+	
+	.dot3{
+		stroke:steelblue;
+		fill:lightblue;
+	}
+	
+	.grid .tick{
+		stroke:lightgrey;
+		opacity:0.7;
+	}
+	.grid path{
+		fill: none;
+		stroke:steelblue;
+		stroke-width:1.5px;
+	}
+</style>
+</head>
+<body>
+	<script type="text/javascript">
+		var margin = {top:70,right:20,bottom:30,left:50},
+			w = 400 - margin.left-margin.right,
+			h = 400 - margin.top - margin.bottom;
+		var x = d3.scale.linear().range([0,w]);
+		var y = d3.scale.linear().range([h,0]);
+		var color = d3.scale.category10();
+		
+		var xAxis = d3.svg.axis()
+			.scale(x)
+			.orient("bottom")
+			.ticks(5);
 
-          #yearSlider {
-              position: absolute;
-              left: 90px;
-              right: 90px;
-              margin-top: 3px;
-          }
+		var yAxis = d3.svg.axis()
+			.scale(y)
+			.orient("left")
+			.ticks(5);
 
-          #yearLabel {
-              position: absolute;
-              left: 0;
-              width: 85px;
-              text-align: right;
-          }
+		var xGrid = d3.svg.axis()
+			.scale(x)
+			.orient("bottom")
+			.ticks(5)
+			.tickSize(-h,0,0)
+			.tickFormat("");
 
-          #play {
-              position: absolute;
-              right: 50px;
-              cursor: pointer;
-          }
-        </style>
-    </head>
-    <body>
-      <div id="center"><div id="fig">
-          <h3>Dorling Cartogram of Obesity in the United States (1995 to 2008)</h3>
-      <div id="container">
-        <div id="yearLabel">Year:</div><div id="yearSlider"></div><img id="play" src="play.png" alt="Play" onclick="playClick()">
-      </div>
-  <!--    <script type="text/javascript+protovis">
+		var yGrid = d3.svg.axis()
+		.scale(y)
+		.orient("left")
+		.ticks(5)
+		.tickSize(-w,0,0)
+		.tickFormat("");
 
-        var year = 2008;
-        $(yearSlider).slider({
-          min: us_stats.minYear, max: us_stats.maxYear, value: us_stats.maxYear, slide: function(e, ui) {
-              //vis.fillStyle(color = color[this.id](ui.value)).render();
-              year = ui.value;
-              updateYear();
-              vis.render();
-            }
-        });
+		var svg = d3.select("body").append("svg")
+			.attr("width",w + margin.left+margin.right)
+			.attr("height",h+margin.top+margin.bottom)
+			.append("g")
+			.attr("transform","translate("+ margin.left +","+margin.top+")");
 
-        us_lowres.forEach(function(c) {
-          c.code = c.code.toUpperCase();
-          c.center = centroid(c.borders[0]);
-        });
+		var line = d3.svg.line()
+			.x(function(d){return x(d.Date);})
+			.y(function(d){return y(d.attendee);});
 
-        var timer = undefined;
-        function playClick() {
-            if(ease) {
-                alert("Please wait for the map to settle.")
-                return;
-            }
+		d3.csv("test_vi_hw1.csv",function(error,data){
+			data.forEach(function(d){
+				console.log(d)
+			});
+			
+			color.domain(d3.keys(data[0]).filter(function(key){
+				return key !=="Date";
+			}));
+			
+			var continents  = color.domain().map(function(name){
+				return{
+					name: name,
+					values: data.map(function(d){
+						return {Date: d.Date,attendee: +d[name]};
+					})
+				};
+			});
+			
+			
+			x.domain(d3.extent(data,function(d){return d.Date;}));
+			y.domain([
+				d3.min(continents,function(c){
+					return d3.min(c.values,function(v){return v.attendee;});
+				}),
+				d3.max(continents,function(c){
+					return d3.max(c.values,function(v){return v.attendee;})
+				})
+			]);
+			
+			svg.selectAll(".dot1")
+				.data(data)
+				.enter().append("circle")
+				.attr("class","dot")
+				.attr("r",3.5)
+				.attr("cx",function(d) {return x(d.Date);})
+				.attr("cy",function(d) {return y(d.ADOM);})
+			
+			svg.selectAll(".dot1")
+				.data(data)
+				.enter().append("circle")
+				.attr("class","dot")
+				.attr("r",3.5)
+				.attr("cx",function(d) {return x(d.Date);})
+				.attr("cy",function(d) {return y(d.BDOM);})
+				
+			svg.selectAll(".dot1")
+				.data(data)
+				.enter().append("circle")
+				.attr("class","dot")
+				.attr("r",3.5)
+				.attr("cx",function(d) {return x(d.Date);})
+				.attr("cy",function(d) {return y(d.HSGOM);})
+				
+			svg.append("g")
+				.attr("class","x axis")
+				.attr("transform","translate(0,"+h+")")
+				.call(xAxis);
+			svg.append("g")
+				.attr("class","y axis")
+				.call(yAxis);
+			svg.append("g")
+				.attr("class","grid")
+				.attr("transform","translate(0,"+h+")")
+				.call(xGrid);
+			svg.append("g")
+				.attr("class","grid")
+				.call(yGrid);
 
-            if (timer) {
-                stop();
-            } else {
-                if(year == us_stats.maxYear) year = us_stats.minYear;
-                $(yearSlider).slider('value', year);
-                $(play).attr("src", 'stop.png');
-                updateYear();
-                vis.render();
-                timer = setInterval(function() {
-                    year++;
-                    if (year >= us_stats.maxYear) {
-                        stop();
-                    }
-                    $(yearSlider).slider('value', year);
-                    updateYear();
-                    vis.render();
-                }, 900);
-            }
-        }
+			var continent = svg.selectAll(".continent")
+				.data(continents)
+				.enter().append("g")
+				.attr("class","continent");
 
-        // Stop the animation
-        function stop() {
-            clearInterval(timer);
-            timer = undefined;
-            $(play).attr("src", 'play.png');
-        }
+			continent.append("path")
+				.attr("class","line")					
+				.attr("d",function(d) {return line(d.values);})
+				.style("stroke",function(d) {return color(d.name);});
+			
+			 var legend = svg.selectAll(".legend")
+			 	.data(color.domain().slice().reverse())
+			 	.enter().append("g")
+			 	.attr("class","legend")
+			 	.attr("transform",function(d,i){return "translate(0,"+i*20+")";});
+			 
+			 legend.append("rect")
+			 	.attr("x",w-18)
+			 	.attr("y",4)
+			 	.attr("width",10)
+			 	.attr("height",10)
+			 	.style("fill",color);
+			 
+			 legend.append("text")
+			 	.attr("x",w-24)
+			 	.attr("y",9)
+			 	.attr("dy",".35em")
+			 	.style("text-anchor","end")
+			 	.text(function(d){return d;});
+			 
+		});
 
-        var i = 0,
-            w = 800, h = 400,
-            mapMargin = 30,
-            scale = pv.Geo.scale().domain({lng:-128, lat:24}, {lng:-64, lat:50}).range({x:mapMargin, y:mapMargin}, {x:w-mapMargin, y:h-mapMargin}),
-            legendMargin = 20,
-            legendScale = pv.Scale.linear(14, 35).range(legendMargin, w-legendMargin),
-            ease = null,
-            yearsMargin = 90,
-            yearsScale = pv.Scale.linear(us_stats.minYear, us_stats.maxYear).range(yearsMargin+2, w-yearsMargin),
-            col = function(v) {
-                  if(v < 17) return "#008038";
-                  if(v < 20) return "#A3D396";
-                  if(v < 23) return "#FDD2AA";
-                  if(v < 26) return "#F7976B";
-                  if(v < 29) return "#F26123";
-                  if(v < 32) return "#E12816";
-                  /* else */ return "#B7161E";
-            };
-            numToRad = function(n) {
-              return Math.sqrt(n)/45;
-            };
-            nodes = [];
-            codeToNode = [];
-            links = [];
-            us_lowres.forEach(function(s) {
-              if(us_stats[s.code]) {
-                var x = scale(s.center).x,
-                    y = scale(s.center).y,
-                    numObese = us_stats[s.code].pop[us_stats.yearIdx(year)]*us_stats[s.code].obese[us_stats.yearIdx(year)]/100,
-                    n = {x: x, y: y, p: {x: x, y: y}, r: numToRad(numObese), code:s.code};
-                nodes.push(n);
-                codeToNode[s.code] = n;
-              }
-            });
-            us_lowres.forEach(function(s) {
-              if(us_stats[s.code]) {
-                var borders = us_borders[s.code];
-                borders.forEach(function(b) {
-                  if(codeToNode[s.code] && codeToNode[b] && s.code < b) {
-                      var nodeA = codeToNode[s.code];
-                      var nodeB = codeToNode[b];
-                      links.push({sourceNode:nodeA, targetNode:nodeB, length:(nodeA.r + nodeB.r + 2)});
-                  }
-                });
-              }
-            });
+		var labels = svg.append("g")
+			.attr("class","labels");
 
-        function updateYear() {
-            if(ease) return;
+		labels.append("text")
+			.attr("transform","translate(0,"+h+")")
+			.attr("x",(w-margin.right))
+			.attr("dx","1.90em")
+			.attr("dy","2.0em")
+			.text("Year");
+		labels.append("text")
+			.attr("transform","rotate(-90)")
+			.attr("y",-40)
+			.attr("dy",".71em")
+			.style("text-anchor","end")
+			.text("Percentage");
 
-            nodes.forEach(function(n) n.r = numToRad(us_stats[n.code].pop[us_stats.yearIdx(year)]*us_stats[n.code].obese[us_stats.yearIdx(year)]/100));
-            links.forEach(function(l) l.length = (l.sourceNode.r + l.targetNode.r + 2));
-            i = 0;
-            var stepSome = setInterval(function() {
-              if (i++ > 10) clearInterval(stepSome);
-              sim.step();
-              vis.render();
-            }, 20);
-        }
+		var title = svg.append("g")
+			.attr("class","title");
 
-        var collisionConstraint = pv.Constraint.collision(function(d) d.r+1),
-            positionConstraint = pv.Constraint.position(function(d) d.p),
-            linkConstraint = pv.Force.spring(100).links(links);
-
-        var sim = pv.simulation(nodes)
-            .constraint(collisionConstraint)
-            .constraint(positionConstraint)
-            .constraint(linkConstraint)
-            .force(pv.Force.drag());
-
-        var vis = new pv.Panel()
-            .width(w)
-            .height(h)
-            .top(30)
-            .bottom(30)
-            .fillStyle("white");
-
-        // Add the ticks and labels for the year slider
-        vis.add(pv.Rule)
-            .data(pv.range(us_stats.minYear, us_stats.maxYear+.1))
-            .left(yearsScale)
-            .height(4)
-            .top(-20)
-          .anchor("bottom")
-            .add(pv.Label)
-            .font("normal 13px sans-serif");
-
-        vis.add(pv.Dot)
-            .data(nodes)
-            .left(function(d) d.x)
-            .top(function(d) d.y)
-            .radius(function(d) d.r)
-            .fillStyle(function(d) col(us_stats[d.code].obese[us_stats.yearIdx(year)]))
-            .strokeStyle(null)
-            .title(function(d) us_stats[d.code].name + ": " + us_stats[d.code].obese[us_stats.yearIdx(year)] + "%")
-           .add(pv.Label)
-            .text(function(d) d.code)
-            .textStyle("#fee")
-            .font(function(d) "bold " + (4*Math.log(d.r)).toFixed(0) + "px sans-serif")
-            .textAlign("center")
-            .textBaseline("middle");
-
-        vis.add(pv.Dot)
-            .data([
-                {v:10000000, l:"10M"},
-                {v:1000000, l:"1M"},
-                {v:5000000, l:"5M"},
-                {v:100000, l:"100K"}
-            ])
-            .fillStyle(null)
-            .strokeStyle("#555")
-            .left(150)
-            .bottom(-30)
-            .radius(function(d) numToRad(d.v))
-          .anchor("top")
-          .add(pv.Label)
-            .text(function(d) d.l)
-
-          // Add the color bars for the color legend
-          vis.add(pv.Bar)
-             .data(pv.range(14,32.1,3))
-             .bottom(function(d) this.index * 15 - 28)
-             .height(10)
-             .width(10)
-             .left(5)
-             .fillStyle(function(d) col(14 + 3 * this.index))
-             .lineWidth(null)
-            .anchor("right")
-            .add(pv.Label)
-             .textAlign("left")
-             .text(function(d) d + " - " + (d+3) + "%");
-
-        ease = setInterval(function() {
-            if (i++ > 140) {
-                clearInterval(ease);
-                ease = null;
-            }
-            sim.step();
-            positionConstraint.alpha(Math.pow(.7, i + 10) + .03);
-            linkConstraint.damping(Math.pow(.9, i + 10) + .01);
-            vis.render();
-          }, 42);
-
-      </script>-->
-  <div class="caption">
-  Absolute number of obese people per state and percentage of obese people, represented with circle area and color respectively. California dominates the map due to its large population size, while color indicates that Mississippi and Alabama are the states with the highest obesity rate.
-  <br/><br/>
-  Source: <a class="source" href="http://apps.nccd.cdc.gov/brfss/page.asp?cat=OB&yr=2008&state=US#OB">National Center for Chronic Disease Prevention and Health Promotion</a>
-  </div>
-    </div></div></body>
-</html>
+		title.append("text")
+		.attr("x",(w/2))
+		.attr("y",-30)
+		.attr("text-anchor","middle")
+		.style("font-size","22px")
+		.text("Question_1");
+		
+	</script>
+</body>
