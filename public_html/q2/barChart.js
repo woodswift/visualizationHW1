@@ -1,85 +1,128 @@
-		//D3 CODE
-		var margin = {top:70,right :20,bottom:30,left:40},
-			w = 1500-margin.left-margin.right,
-			h = 500-margin.top-margin.bottom;
+var type = $("#type").val();
+barChart(type);
+$("#type").change(function(){
+    type = $("#type").val();
+    $("svg").remove();
+    barChart(type);
+});
 
-		var color = d3.scale.category10();
 
-		var x = d3.scale.ordinal()
-			.rangeRoundBands([0,w],.1);
+function barChart(type){
+    alert(type);
+    if(type === ""){
+        return;
+    }
+    var margin = {top:70,right :20,bottom:30,left:40},
+        w = 1500-margin.left-margin.right,
+        h = 500-margin.top-margin.bottom;
 
-		var y = d3.scale.linear()
-			.range([h,0]);
+    var color = d3.scale.category10();
 
-		//var formatPercent = d3.format(".0%");
+    var x = d3.scale.ordinal()
+            .rangeRoundBands([0,w],.1);
 
-		var xAxis = d3.svg.axis()
-			.scale(x)
-			.orient("bottom");
+    var y = d3.scale.linear()
+            .range([h,0]);
 
-		var yAxis = d3.svg.axis()
-			.scale(y)
-			.orient("left")
-			.ticks(5);
-		
-		var yGrid = d3.svg.axis()
-			.scale(y)
-			.orient("left")
-			.ticks(5)
-			.tickSize(-w,0,0)
-			.tickFormat("");
+    //var formatPercent = d3.format(".0%");
 
-		var svg = d3.select("body").append("svg")
-			.attr("width",w+margin.left+margin.right)
-			.attr("height",h+margin.top+margin.bottom)
-			.append("g")
-			.attr("transform","translate("+margin.left+","+margin.top+")");
+    var xAxis = d3.svg.axis()
+            .scale(x)
+            .orient("bottom");
 
-		d3.csv("HW_1_Q2.csv",function(error,data){
+    var yAxis = d3.svg.axis()
+            .scale(y)
+            .orient("left")
+            .ticks(5);
 
-		x.domain(data.map(function(d){return d.state;}));
-		y.domain([0,d3.max(data,function(d){return d.HSGOM})]);
+    var yGrid = d3.svg.axis()
+            .scale(y)
+            .orient("left")
+            .ticks(5)
+            .tickSize(-w,0,0)
+            .tickFormat("");
 
-		svg.append("g")
-			.attr("class","x axis")
-			.attr("transform","translate(0,"+h+")")
-			.call(xAxis);
+    var svg = d3.select("body").append("svg")
+            .attr("width",w+margin.left+margin.right)
+            .attr("height",h+margin.top+margin.bottom)
+            .append("g")
+            .attr("transform","translate("+margin.left+","+margin.top+")");
 
-		svg.append("g")
-			.attr("class","y axis")
-			.call(yAxis);
+    d3.csv("HW_1_Q2.csv",function(error,data){
 
-		svg.append("g")
-			.attr("class","grid")
-			.call(yGrid);
+        x.domain(data.map(function(d){return d.state;}));
+        if(type === "HSGOM"){
+            y.domain([0,d3.max(data,function(d){return d.HSGOM;})]);
+        }else if(type === "BDOM"){
+            y.domain([0,d3.max(data,function(d){return d.BDOM;})]);
+        }else{
+            y.domain([0,d3.max(data,function(d){return d.ADOM;})]);
+        }
 
-		var labels = svg.append("g")
-			.attr("class","labels");
 
-		labels.append("text")
-			.attr("transform","rotate(-90)")
-			.attr("y",6)
-			.attr("dy",".71em")
-			.style("text-anchor","end")
-			.text("Percentage [%]");
-		
-		var title = svg.append("g")
-			.attr("class","title");
+        svg.append("g")
+                .attr("class","x axis")
+                .attr("transform","translate(0,"+h+")")
+                .call(xAxis);
 
-		title.append("text")
-			.attr("x",(w/2))
-			.attr("y",-30)
-			.attr("text-anchor","middle")
-			.style("font-size","22px")
-			.text("HOMEWORK1_QUESTION2_HSGOM");
-		
-		svg.selectAll(".bar")
-			.data(data)
-			.enter().append("rect")
-			.attr("class","bar")
-			.attr("x",function(d) {return x(d.state);})
-			.attr("width", x.rangeBand())
-			.attr("y",function(d){return y(d.HSGOM);	})
-			.attr("height",function(d){return h-y(d.HSGOM);})
-			.attr("fill",function(d) {return color(d.country);});
-		});
+        svg.append("g")
+                .attr("class","y axis")
+                .call(yAxis);
+
+        svg.append("g")
+                .attr("class","grid")
+                .call(yGrid);
+
+        var labels = svg.append("g")
+                .attr("class","labels");
+
+        labels.append("text")
+                .attr("transform","rotate(-90)")
+                .attr("y",6)
+                .attr("dy",".71em")
+                .style("text-anchor","end")
+                .text("Percentage [%]");
+
+        var title = svg.append("g")
+                .attr("class","title");
+        
+        title.append("text")
+                .attr("x",(w/2))
+                .attr("y",-30)
+                .attr("text-anchor","middle")
+                .style("font-size","22px")
+                .text("HOMEWORK1_QUESTION2_"+type);
+
+        if(type === "HSGOM"){
+            svg.selectAll(".bar")
+                .data(data)
+                .enter().append("rect")
+                .attr("class","bar")
+                .attr("x",function(d) {return x(d.state);})
+                .attr("width", x.rangeBand())
+                .attr("y",function(d){return y(d.HSGOM);	})
+                .attr("height",function(d){return h-y(d.HSGOM);})
+                .attr("fill",function(d) {return color(d.country);});
+        }else if(type === "BDOM"){
+            svg.selectAll(".bar")
+                .data(data)
+                .enter().append("rect")
+                .attr("class","bar")
+                .attr("x",function(d) {return x(d.state);})
+                .attr("width", x.rangeBand())
+                .attr("y",function(d){return y(d.BDOM);	})
+                .attr("height",function(d){return h-y(d.BDOM);})
+                .attr("fill",function(d) {return color(d.country);});
+        }else{
+            svg.selectAll(".bar")
+                .data(data)
+                .enter().append("rect")
+                .attr("class","bar")
+                .attr("x",function(d) {return x(d.state);})
+                .attr("width", x.rangeBand())
+                .attr("y",function(d){return y(d.ADOM);	})
+                .attr("height",function(d){return h-y(d.ADOM);})
+                .attr("fill",function(d) {return color(d.country);});
+        }
+    });
+}		
