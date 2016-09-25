@@ -6,9 +6,12 @@ $("#type").change(function(){
     barChart(type);
 });
 
+$("#return").click(function(){
+    self.location= "../index.html";
+});
 
 function barChart(type){
-    alert(type);
+//    alert(type);
     if(type === ""){
         return;
     }
@@ -56,7 +59,9 @@ function barChart(type){
         }else if(type === "BDOM"){
             y.domain([0,d3.max(data,function(d){return d.BDOM;})]);
         }else{
-            y.domain([0,d3.max(data,function(d){return d.ADOM;})]);
+            alert(d3.max(data,function(d){return d.ADOM;}));
+//            console.log(data,function(d){return d.ADOM;});   
+            y.domain([0,Number(d3.max(data,function(d){return d.ADOM;}))+20]);
         }
 
 

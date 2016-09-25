@@ -3,6 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+$("#return").click(function(){
+    self.location= "../index.html";
+});
+
 var margin = {top:70,right:20,bottom:30,left:50},
     w = 400 - margin.left-margin.right,
     h = 400 - margin.top - margin.bottom;
