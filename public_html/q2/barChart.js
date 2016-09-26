@@ -110,7 +110,6 @@ function barChart(type){
                 .attr("fill",function(d) {return color(d.country);})
 //                .on("mouseover", mouseOverEvent(data));
                 .on("mouseover", function(d) {
-                    console.log(d3.select(this).attr("x"));
                     //Get this bar's x/y values, then augment for the tooltip
                     var xPosition = parseFloat(d3.select(this).attr("x")) + x.rangeBand() / 2;
                     var yPosition = parseFloat(d3.select(this).attr("y")) / 2 + h / 2;
@@ -123,7 +122,7 @@ function barChart(type){
                         .text(d.HSGOM);
                     d3.select("#label").text(d.state);
                     //Show the tooltip
-                    d3.select("#tooltip").classed("hidden", false)
+                    d3.select("#tooltip").classed("hidden", false);
 
                })
                .on("mouseout", function() {		   

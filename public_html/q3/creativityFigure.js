@@ -1,10 +1,10 @@
-creativityFigure();
+creativityFigure("HW_1_Q3_1990.csv");
 
-$("#return").click(function(){
+$("#return").click(function(dataName){
     self.location= "../index.html";
 });
 
-function creativityFigure(){
+function creativityFigure(dataName){
     var color = d3.scale.category10();
     var margin = {top:70,right:20,bottom:30,left:40},
         w = 1500-margin.left-margin.right,
@@ -39,7 +39,7 @@ function creativityFigure(){
             .append("g")
             .attr("transform","translate("+margin.left+","+margin.top+")");
 
-    d3.csv("HW_1_Q3.csv",function(data){
+    d3.csv(dataName,function(data){
         color.domain(d3.keys(data[0]).filter(function(key){
             return key !=="state";
         }));
@@ -87,7 +87,28 @@ function creativityFigure(){
                 .attr("width",x.rangeBand())
                 .attr("y",function(d){return (y(d.y1*d.sum));})
                 .attr("height",function(d){return ((y(d.y0)-y(d.y1))*d.sum);})
-                .style("fill",function(d) {return color(d.name);});
+                .style("fill",function(d) {return color(d.name);})
+//                .on("mouseover", function(d) {
+////                    console.log(d3.select(this).attr("x"));
+//                    //Get this bar's x/y values, then augment for the tooltip
+//                    var xPosition = parseFloat(d3.parents(this).attr("x")) + x.rangeBand() / 2;
+//                    var yPosition = parseFloat(d3.parents(this).attr("y")) / 2 + h / 2;
+//
+//                    //Update the tooltip position and value
+//                    d3.select("#tooltip")
+//                        .style("left", xPosition + "px")
+//                        .style("top", yPosition + "px")						
+//                        .select("#value")
+//                        .text(d.HSGOM);
+//                    d3.select("#label").text(d.name);
+//                    //Show the tooltip
+//                    d3.select("#tooltip").classed("hidden", false);
+//
+//               })
+//               .on("mouseout", function() {		   
+//                    //Hide the tooltip
+//                    d3.select("#tooltip").classed("hidden", true);
+//               });
 
         var legend = svg.selectAll(".legend")
                 .data(color.domain().slice().reverse())
