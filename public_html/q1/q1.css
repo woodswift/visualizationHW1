@@ -1,13 +1,18 @@
-body{
-    font: 10px verdana;
-}
 .axis path,
 .axis line{
     fill:none;
     stroke:#333;
 }
 
-.dot{
+.dot1{
+    stroke:darkgreen;
+    fill:lightgreen;
+}
+.dot2{
+    stroke:orange;
+    fill:yellow;
+}
+.dot3{
     stroke:steelblue;
     fill:lightblue;
 }

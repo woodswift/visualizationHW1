@@ -82,7 +82,7 @@ d3.csv("test_vi_hw1.csv",function(error,data){
     svg.selectAll(".dot1")
             .data(data)
             .enter().append("circle")
-            .attr("class","dot")
+            .attr("class","dot1")
             .attr("r",3.5)
             .attr("cx",function(d) {return x(d.Date);})
             .attr("cy",function(d) {return y(d.ADOM);});
@@ -90,7 +90,7 @@ d3.csv("test_vi_hw1.csv",function(error,data){
     svg.selectAll(".dot2")
             .data(data)
             .enter().append("circle")
-            .attr("class","dot")
+            .attr("class","dot2")
             .attr("r",3.5)
             .attr("cx",function(d) {return x(d.Date);})
             .attr("cy",function(d) {return y(d.BDOM);});
@@ -98,7 +98,7 @@ d3.csv("test_vi_hw1.csv",function(error,data){
     svg.selectAll(".dot3")
             .data(data)
             .enter().append("circle")
-            .attr("class","dot")
+            .attr("class","dot3")
             .attr("r",3.5)
             .attr("cx",function(d) {return x(d.Date);})
             .attr("cy",function(d) {return y(d.HSGOM);});
