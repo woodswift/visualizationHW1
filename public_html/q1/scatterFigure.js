@@ -49,9 +49,9 @@ var line = d3.svg.line()
         .y(function(d){return y(d.attendee);});
 
 d3.csv("test_vi_hw1.csv",function(error,data){
-    data.forEach(function(d){
-        console.log(d);
-    });
+//    data.forEach(function(d){
+//        console.log(d);
+//    });
 
     //get the attributes name of each line
     color.domain(d3.keys(data[1]).filter(function(key){

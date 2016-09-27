@@ -40,9 +40,9 @@ function creativityFigure(dataName){
         var sum = 0;
         data.forEach(function(d){
             sum = d.HSGOM;
-            hig = d.HSGOM - d.BDOM;
-            mid = d.BDOM -d.ADOM;
-            sma = d.ADOM - 0;
+            hig = Math.round((d.HSGOM - d.BDOM)*10)/10;
+            mid = Math.round((d.BDOM -d.ADOM)*10)/10;
+            sma = Math.round((d.ADOM - 0)*10)/10;
             var y0 = 0;
             var i = -1;
             d.states = color.domain().map(function(name){
