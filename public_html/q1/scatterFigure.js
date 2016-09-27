@@ -49,9 +49,9 @@ var line = d3.svg.line()
         .y(function(d){return y(d.attendee);});
 
 d3.csv("test_vi_hw1.csv",function(error,data){
-//    data.forEach(function(d){
-//        console.log(d);
-//    });
+    data.forEach(function(d){
+        console.log(d);
+    });
 
     //get the attributes name of each line
     color.domain(d3.keys(data[1]).filter(function(key){
@@ -66,7 +66,7 @@ d3.csv("test_vi_hw1.csv",function(error,data){
             })
         };
     });
-    console.log(continents);
+//    console.log(continents);
 
     x.domain(d3.extent(data,function(d){return d.Date;}));
     y.domain([
@@ -74,7 +74,7 @@ d3.csv("test_vi_hw1.csv",function(error,data){
                 return d3.min(c.values,function(v){return v.attendee;});
         }),
         d3.max(continents,function(c){
-                return d3.max(c.values,function(v){return v.attendee;})
+                return d3.max(c.values,function(v){return v.attendee;});
         })
     ]);
 //    console.log(x.domain());
@@ -85,7 +85,34 @@ d3.csv("test_vi_hw1.csv",function(error,data){
             .attr("class","dot1")
             .attr("r",3.5)
             .attr("cx",function(d) {return x(d.Date);})
-            .attr("cy",function(d) {return y(d.ADOM);});
+            .attr("cy",function(d) {return y(d.ADOM);})
+            .on("mouseover", function(d){
+//                var color = $(this).css("fill");
+//                $(this).css("fill","yellow");
+//                $("rect").mouseout(function(){
+//                    $(this).css("fill",color);
+//                    $(this).unbind("mouseout");
+//                });
+
+                //Get this bar's x/y values, then augment for the tooltip
+                var xPosition = parseFloat(d3.select(this).attr("cx"))+$("svg").position().left;
+                var yPosition = parseFloat(d3.select(this).attr("cy"))+$("svg").position().top;
+                console.log("x:"+xPosition);
+                console.log("y:"+yPosition);
+                //Update the tooltip position and value
+                d3.select("#tooltip")
+                    .style("left", xPosition + "px")
+                    .style("top", yPosition + "px")						
+                    .select("#value")
+                    .text(d.ADOM);
+                d3.select("#label").text(d.Date);
+                //Show the tooltip
+                d3.select("#tooltip").classed("hidden", false);
+            })
+            .on("mouseout", function() {		   
+                //Hide the tooltip
+                d3.select("#tooltip").classed("hidden", true);
+             });
 
     svg.selectAll(".dot2")
             .data(data)
@@ -93,7 +120,27 @@ d3.csv("test_vi_hw1.csv",function(error,data){
             .attr("class","dot2")
             .attr("r",3.5)
             .attr("cx",function(d) {return x(d.Date);})
-            .attr("cy",function(d) {return y(d.BDOM);});
+            .attr("cy",function(d) {return y(d.BDOM);})
+            .on("mouseover", function(d){
+                //Get this bar's x/y values, then augment for the tooltip
+                var xPosition = parseFloat(d3.select(this).attr("cx"))+$("svg").position().left;
+                var yPosition = parseFloat(d3.select(this).attr("cy"))+$("svg").position().top;
+                console.log("x:"+xPosition);
+                console.log("y:"+yPosition);
+                //Update the tooltip position and value
+                d3.select("#tooltip")
+                    .style("left", xPosition + "px")
+                    .style("top", yPosition + "px")						
+                    .select("#value")
+                    .text(d.BDOM);
+                d3.select("#label").text(d.Date);
+                //Show the tooltip
+                d3.select("#tooltip").classed("hidden", false);
+            })
+            .on("mouseout", function() {		   
+                //Hide the tooltip
+                d3.select("#tooltip").classed("hidden", true);
+             });
 
     svg.selectAll(".dot3")
             .data(data)
@@ -101,7 +148,27 @@ d3.csv("test_vi_hw1.csv",function(error,data){
             .attr("class","dot3")
             .attr("r",3.5)
             .attr("cx",function(d) {return x(d.Date);})
-            .attr("cy",function(d) {return y(d.HSGOM);});
+            .attr("cy",function(d) {return y(d.HSGOM);})
+            .on("mouseover", function(d){
+                //Get this bar's x/y values, then augment for the tooltip
+                var xPosition = parseFloat(d3.select(this).attr("cx"))+$("svg").position().left;
+                var yPosition = parseFloat(d3.select(this).attr("cy"))+$("svg").position().top;
+                console.log("x:"+xPosition);
+                console.log("y:"+yPosition);
+                //Update the tooltip position and value
+                d3.select("#tooltip")
+                    .style("left", xPosition + "px")
+                    .style("top", yPosition + "px")						
+                    .select("#value")
+                    .text(d.HSGOM);
+                d3.select("#label").text(d.Date);
+                //Show the tooltip
+                d3.select("#tooltip").classed("hidden", false);
+            })
+            .on("mouseout", function() {		   
+                //Hide the tooltip
+                d3.select("#tooltip").classed("hidden", true);
+             });
 
     svg.append("g")
             .attr("class","x axis")
@@ -128,12 +195,13 @@ d3.csv("test_vi_hw1.csv",function(error,data){
             .attr("d",function(d) {return line(d.values);})
             .style("stroke",function(d) {return color(d.name);});
 
-    console.log(color.domain().slice());
+//    console.log(color.domain().slice());
     var legend = svg.selectAll(".legend")
            .data(color.domain())
            .enter().append("g")
            .attr("class","legend")
-           .attr("transform",function(d,i){return "translate(0,"+i*20+")";});
+           .attr("transform",function(d,i){return "translate(0,"+(i*20+10)+")";})
+           .style("margin-top","30px");
 
     legend.append("rect")
            .attr("x",w-18)
