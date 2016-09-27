@@ -149,7 +149,7 @@ function barChart(type){
                             .style("left", xPosition + "px")
                             .style("top", yPosition + "px")						
                             .select("#value")
-                            .text(d.HSGOM);
+                            .text(d.BDOM);
                     d3.select("#label").text(d.state);
                     //Show the tooltip
                     d3.select("#tooltip").classed("hidden", false);
@@ -179,7 +179,7 @@ function barChart(type){
                             .style("left", xPosition + "px")
                             .style("top", yPosition + "px")						
                             .select("#value")
-                            .text(d.HSGOM);
+                            .text(d.ADOM);
                     d3.select("#label").text(d.state);
                     //Show the tooltip
                     d3.select("#tooltip").classed("hidden", false);
