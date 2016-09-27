@@ -1,4 +1,11 @@
-creativityFigure("HW_1_Q3_1990.csv");
+var year = $("#year").val();
+creativityFigure("HW_1_Q3_"+year+".csv");
+$("#year").change(function(){
+    year = $("#year").val();
+    alert(year);
+    $("svg").remove();
+    creativityFigure("HW_1_Q3_"+year+".csv");
+});
 
 $("#return").click(function(dataName){
     self.location= "../index.html";
