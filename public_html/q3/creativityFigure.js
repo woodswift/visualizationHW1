@@ -1,15 +1,3 @@
-var year = $("#year").val();
-creativityFigure("HW_1_Q3_"+year+".csv");
-$("#year").change(function(){
-    year = $("#year").val();
-    $("svg").remove();
-    creativityFigure("HW_1_Q3_"+year+".csv");
-});
-
-$("#return").click(function(dataName){
-    self.location= "../index.html";
-});
-
 function creativityFigure(dataName){
     var color = d3.scale.category10();
     var margin = {top:70,right:20,bottom:30,left:40},
@@ -94,27 +82,14 @@ function creativityFigure(dataName){
                 .attr("y",function(d){return (y(d.y1*d.sum));})
                 .attr("height",function(d){return ((y(d.y0)-y(d.y1))*d.sum);})
                 .style("fill",function(d) {return color(d.name);})
-//                .on("mouseover", function(d) {
-////                    console.log(d3.select(this).attr("x"));
-//                    //Get this bar's x/y values, then augment for the tooltip
-//                    var xPosition = parseFloat(d3.parents(this).attr("x")) + x.rangeBand() / 2;
-//                    var yPosition = parseFloat(d3.parents(this).attr("y")) / 2 + h / 2;
-//
-//                    //Update the tooltip position and value
-//                    d3.select("#tooltip")
-//                        .style("left", xPosition + "px")
-//                        .style("top", yPosition + "px")						
-//                        .select("#value")
-//                        .text(d.HSGOM);
-//                    d3.select("#label").text(d.name);
-//                    //Show the tooltip
-//                    d3.select("#tooltip").classed("hidden", false);
-//
-//               })
-//               .on("mouseout", function() {		   
-//                    //Hide the tooltip
-//                    d3.select("#tooltip").classed("hidden", true);
-//               });
+                .on("mouseover", function(){
+                    var color = $(this).css("fill");
+                    $(this).css("fill","yellow");
+                    $("rect").mouseout(function(){
+                        $(this).css("fill",color);
+                        $(this).unbind("mouseout");
+                    });
+                });
 
         var legend = svg.selectAll(".legend")
                 .data(color.domain().slice().reverse())
@@ -157,5 +132,17 @@ function creativityFigure(dataName){
             .attr("text-anchor","middle")
             .style("font-size","22px")
             .text("Homework_1_Question_3");
+    return;
 }
-    
+
+var year = $("#year").val();
+creativityFigure("HW_1_Q3_"+year+".csv");
+$("#year").change(function(){
+    year = $("#year").val();
+    $("svg").remove();
+    creativityFigure("HW_1_Q3_"+year+".csv");
+});
+
+$("#return").click(function(){
+    self.location= "../index.html";
+});
