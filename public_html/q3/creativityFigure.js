@@ -48,7 +48,13 @@ function creativityFigure(dataName){
             d.states = color.domain().map(function(name){
                     i++;
                     var list = [sma,mid,hig];
-                    return{ name:name, y0:y0/sum,y1: (y0 += list[i])/sum,sum:sum};	
+                    return{ name:name, 
+                            y0:y0/sum,
+                            y1: (y0 += list[i])/sum,
+                            sum:sum,
+                            val:list[i],
+                            state: d.state
+                        };	
             });
         });
         x.domain(data.map(function(d){return d.state;}));
@@ -79,16 +85,31 @@ function creativityFigure(dataName){
                 .data(function(d){return d.states;})
                 .enter().append("rect")
                 .attr("width",x.rangeBand())
+                .attr("val",function(d){return x(d.state);})
                 .attr("y",function(d){return (y(d.y1*d.sum));})
                 .attr("height",function(d){return ((y(d.y0)-y(d.y1))*d.sum);})
                 .style("fill",function(d) {return color(d.name);})
-                .on("mouseover", function(){
+                .on("mouseover", function(d){
                     var color = $(this).css("fill");
                     $(this).css("fill","yellow");
                     $("rect").mouseout(function(){
                         $(this).css("fill",color);
                         $(this).unbind("mouseout");
                     });
+                    
+                    //Get this bar's x/y values, then augment for the tooltip
+                    var xPosition = parseFloat($(this).attr("val")) + x.rangeBand() / 2;
+                    var yPosition = parseFloat(d3.select(this).attr("y")) / 2 + h / 2;
+//                    console.log(xPosition);
+                    //Update the tooltip position and value
+                    d3.select("#tooltip")
+                        .style("left", xPosition + "px")
+                        .style("top", yPosition + "px")						
+                        .select("#value")
+                        .text(d.val);
+                    d3.select("#label").text(d.name);
+                    //Show the tooltip
+                    d3.select("#tooltip").classed("hidden", false);
                 });
 
         var legend = svg.selectAll(".legend")
