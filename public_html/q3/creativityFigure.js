@@ -1,4 +1,4 @@
-function creativityFigure(dataName){
+function creativityFigure(dataName,year){
     var color = d3.scale.category10();
     var margin = {top:70,right:20,bottom:30,left:40},
         w = 1500-margin.left-margin.right,
@@ -163,16 +163,16 @@ function creativityFigure(dataName){
             .attr("y",-30)
             .attr("text-anchor","middle")
             .style("font-size","22px")
-            .text("Homework_1_Question_3");
+            .text("The education attainment values of the three categories of each state in "+year);
     return;
 }
 
 var year = $("#year").val();
-creativityFigure("HW_1_Q3_"+year+".csv");
+creativityFigure("HW_1_Q3_"+year+".csv",year);
 $("#year").change(function(){
     year = $("#year").val();
     $("svg").remove();
-    creativityFigure("HW_1_Q3_"+year+".csv");
+    creativityFigure("HW_1_Q3_"+year+".csv",year);
 });
 
 $("#return").click(function(){

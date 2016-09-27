@@ -10,21 +10,27 @@
         <link rel="stylesheet" type="text/css" href="../common.css"/>
     </head>
     <body>
-    <div class="controller">
-        <button id="return">return</button>
-        <select id="year">
-            <option value ="1990">1990</option>
-            <option value ="2000">2000</option>
-            <option value="2006">2006</option>
-            <option value="2007">2007</option>
-            <option value="2008">2008</option>
-            <option value="2009">2009</option>
-        </select>
-    </div>
-    <div id="tooltip" class="hidden">
-        <p><strong id="label">Important Label Heading</strong></p>
-        <p><span id="value">100</span>%</p>
-    </div>
-    <script type="text/javascript" src="./creativityFigure.js"></script>
-</body>
+        <div class="controller">
+            <button id="return">return</button>
+            <select id="year">
+                <option value ="1990">1990</option>
+                <option value ="2000">2000</option>
+                <option value="2006">2006</option>
+                <option value="2007">2007</option>
+                <option value="2008">2008</option>
+                <option value="2009">2009</option>
+            </select>
+        </div>
+        <div>
+            <p>HSGOM: High school graduate or more </p>
+            <p>BDOM: Bachelor's degree or more</p>
+            <p>ADOM: Advanced degree or more</p>
+            <p style="width:960px;margin: auto;">The education attainment of the three categories of each state at the same year has a kind of hierarchy relationship, which is the fact that the one who achieved a bachelor degree has obtained a high school degree already, and the one who achieved an advanced degree or more has obtained a bachelor degree already</p>
+        </div>
+        <div id="tooltip" class="hidden">
+            <p><strong id="label">Important Label Heading</strong></p>
+            <p><span id="value">100</span>%</p>
+        </div>
+        <script type="text/javascript" src="./creativityFigure.js"></script>
+    </body>
 </html>

@@ -242,6 +242,6 @@ title.append("text")
         .attr("x",(w/2))
         .attr("y",-30)
         .attr("text-anchor","middle")
-        .style("font-size","22px")
-        .text("Question_1");
+        .style("font-size","10px")
+        .text("Educational attainment of three categories from 1990 to 2009");
 
