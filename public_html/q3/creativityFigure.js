@@ -82,14 +82,8 @@ function creativityFigure(dataName){
                 });
 
         state.selectAll("rect")
-                .transition().duration(500)
                 .data(function(d){return d.states;})
                 .enter().append("rect")
-                .attr("width",x.rangeBand())
-                .attr("val",function(d){return x(d.state);})
-                .attr("y",function(d){return (y(d.y1*d.sum));})
-                .attr("height",function(d){return ((y(d.y0)-y(d.y1))*d.sum);})
-                .style("fill",function(d) {return color(d.name);})
                 .on("mouseover", function(d){
                     var color = $(this).css("fill");
                     $(this).css("fill","yellow");
@@ -97,7 +91,7 @@ function creativityFigure(dataName){
                         $(this).css("fill",color);
                         $(this).unbind("mouseout");
                     });
-                    
+
                     //Get this bar's x/y values, then augment for the tooltip
                     var xPosition = parseFloat($(this).attr("val")) + x.rangeBand() / 2;
                     var yPosition = parseFloat(d3.select(this).attr("y")) / 2 + h / 2;
@@ -115,7 +109,19 @@ function creativityFigure(dataName){
                 .on("mouseout", function() {		   
                     //Hide the tooltip
                     d3.select("#tooltip").classed("hidden", true);
-                 });
+                 })
+                .style("fill",function(d) {return color(d.name);})
+                .attr("width",x.rangeBand())
+                .attr("val",function(d){return x(d.state);})
+                .attr("y",y(0))
+                .attr("height",0);
+                
+        d3.selectAll("rect")
+                .transition("size")
+                        .duration(1000)
+                        .attr("y",function(d){console.log(y(d.y1*d.sum));return (y(d.y1*d.sum));})
+                        .attr("height",function(d){return ((y(d.y0)-y(d.y1))*d.sum);});
+        
 
         var legend = svg.selectAll(".legend")
                 .data(color.domain().slice().reverse())
