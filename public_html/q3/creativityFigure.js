@@ -2,7 +2,6 @@ var year = $("#year").val();
 creativityFigure("HW_1_Q3_"+year+".csv");
 $("#year").change(function(){
     year = $("#year").val();
-    alert(year);
     $("svg").remove();
     creativityFigure("HW_1_Q3_"+year+".csv");
 });
