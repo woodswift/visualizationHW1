@@ -82,6 +82,7 @@ function creativityFigure(dataName){
                 });
 
         state.selectAll("rect")
+                .transition().duration(500)
                 .data(function(d){return d.states;})
                 .enter().append("rect")
                 .attr("width",x.rangeBand())

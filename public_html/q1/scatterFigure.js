@@ -83,7 +83,7 @@ d3.csv("test_vi_hw1.csv",function(error,data){
             .data(data)
             .enter().append("circle")
             .attr("class","dot1")
-            .attr("r",3.5)
+            .attr("r",5.5)
             .attr("cx",function(d) {return x(d.Date);})
             .attr("cy",function(d) {return y(d.ADOM);})
             .on("mouseover", function(d){
@@ -118,7 +118,7 @@ d3.csv("test_vi_hw1.csv",function(error,data){
             .data(data)
             .enter().append("circle")
             .attr("class","dot2")
-            .attr("r",3.5)
+            .attr("r",5.5)
             .attr("cx",function(d) {return x(d.Date);})
             .attr("cy",function(d) {return y(d.BDOM);})
             .on("mouseover", function(d){
@@ -146,7 +146,7 @@ d3.csv("test_vi_hw1.csv",function(error,data){
             .data(data)
             .enter().append("circle")
             .attr("class","dot3")
-            .attr("r",3.5)
+            .attr("r",5.5)
             .attr("cx",function(d) {return x(d.Date);})
             .attr("cy",function(d) {return y(d.HSGOM);})
             .on("mouseover", function(d){
