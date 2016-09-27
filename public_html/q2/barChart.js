@@ -96,7 +96,7 @@ function barChart(type){
                 .attr("y",-30)
                 .attr("text-anchor","middle")
                 .style("font-size","22px")
-                .text("HOMEWORK1_QUESTION2_"+type);
+                .text("Education attainment in 2009 across the different states in U.S "+type);
 
         if(type === "HSGOM"){
             svg.selectAll(".bar")
