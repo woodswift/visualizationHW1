@@ -110,7 +110,11 @@ function creativityFigure(dataName){
                     d3.select("#label").text(d.name);
                     //Show the tooltip
                     d3.select("#tooltip").classed("hidden", false);
-                });
+                })
+                .on("mouseout", function() {		   
+                    //Hide the tooltip
+                    d3.select("#tooltip").classed("hidden", true);
+                 });
 
         var legend = svg.selectAll(".legend")
                 .data(color.domain().slice().reverse())
