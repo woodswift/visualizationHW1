@@ -105,8 +105,8 @@ function barChart(type){
                 .attr("class","bar")
                 .attr("x",function(d) {return x(d.state);})
                 .attr("width", x.rangeBand())
-                .attr("y",function(d){return y(d.HSGOM);	})
-                .attr("height",function(d){return h-y(d.HSGOM);})
+                .attr("y",y(0))
+                .attr("height",0)
                 .attr("fill",function(d) {return color(d.country);})
 //                .on("mouseover", mouseOverEvent(data));
                 .on("mouseover", function(d) {
@@ -129,6 +129,11 @@ function barChart(type){
                     //Hide the tooltip
                     d3.select("#tooltip").classed("hidden", true);
                });
+            d3.selectAll("rect")
+                .transition("size")
+                    .duration(1000)
+                    .attr("y",function(d){return y(d.HSGOM);})
+                    .attr("height",function(d){return h-y(d.HSGOM);});
         }else if(type === "BDOM"){
             svg.selectAll(".bar")
                 .data(data)
@@ -136,8 +141,8 @@ function barChart(type){
                 .attr("class","bar")
                 .attr("x",function(d) {return x(d.state);})
                 .attr("width", x.rangeBand())
-                .attr("y",function(d){return y(d.BDOM);	})
-                .attr("height",function(d){return h-y(d.BDOM);})
+                .attr("y",y(0))
+                .attr("height",0)
                 .attr("fill",function(d) {return color(d.country);})
                 .on("mouseover", function(d) {
                     //Get this bar's x/y values, then augment for the tooltip
@@ -159,14 +164,19 @@ function barChart(type){
                     //Hide the tooltip
                     d3.select("#tooltip").classed("hidden", true);
                 });
+            d3.selectAll("rect")
+                .transition("size")
+                    .duration(1000)
+                    .attr("y",function(d){return y(d.BDOM);})
+                    .attr("height",function(d){return h-y(d.BDOM);});
         }else{
             svg.selectAll(".bar")
                 .data(data)
                 .enter().append("rect")
                 .attr("class","bar")
                 .attr("x",function(d) {return x(d.state);})
-                .attr("width", x.rangeBand())
-                .attr("y",function(d){return y(d.ADOM);	})
+                .attr("y",y(0))
+                .attr("height",0)
                 .attr("height",function(d){return h-y(d.ADOM);})
                 .attr("fill",function(d) {return color(d.country);})
                 .on("mouseover", function(d) {
@@ -188,6 +198,12 @@ function barChart(type){
                     //Hide the tooltip
                     d3.select("#tooltip").classed("hidden", true);
                 });
+            d3.selectAll("rect")
+                .transition("size")
+                    .duration(1000)
+                    .attr("width", x.rangeBand())
+                    .attr("y",function(d){return y(d.ADOM);});
+                    
         }
     });
 }		
