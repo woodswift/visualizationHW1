@@ -118,7 +118,7 @@ function creativityFigure(dataName,year){
                 
         d3.selectAll("rect")
                 .transition("size")
-                        .duration(1000)
+                        .duration(2000)
                         .attr("y",function(d){console.log(y(d.y1*d.sum));return (y(d.y1*d.sum));})
                         .attr("height",function(d){return ((y(d.y0)-y(d.y1))*d.sum);});
         

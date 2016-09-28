@@ -131,7 +131,7 @@ function barChart(type){
                });
             d3.selectAll("rect")
                 .transition("size")
-                    .duration(1000)
+                    .duration(2000)
                     .attr("y",function(d){return y(d.HSGOM);})
                     .attr("height",function(d){return h-y(d.HSGOM);});
         }else if(type === "BDOM"){
@@ -166,7 +166,7 @@ function barChart(type){
                 });
             d3.selectAll("rect")
                 .transition("size")
-                    .duration(1000)
+                    .duration(2000)
                     .attr("y",function(d){return y(d.BDOM);})
                     .attr("height",function(d){return h-y(d.BDOM);});
         }else{
@@ -177,7 +177,7 @@ function barChart(type){
                 .attr("x",function(d) {return x(d.state);})
                 .attr("y",y(0))
                 .attr("height",0)
-                .attr("height",function(d){return h-y(d.ADOM);})
+                .attr("width", x.rangeBand())
                 .attr("fill",function(d) {return color(d.country);})
                 .on("mouseover", function(d) {
                     //Get this bar's x/y values, then augment for the tooltip
@@ -200,8 +200,8 @@ function barChart(type){
                 });
             d3.selectAll("rect")
                 .transition("size")
-                    .duration(1000)
-                    .attr("width", x.rangeBand())
+                    .duration(2000)
+                    .attr("height",function(d){return h-y(d.ADOM);})
                     .attr("y",function(d){return y(d.ADOM);});
                     
         }
